@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -47,6 +47,7 @@ def index():
 
         db.session.add(form)
         db.session.commit()
+        flash(f"{data['first_name']} your data was submitted successfully ")
 
 
 
