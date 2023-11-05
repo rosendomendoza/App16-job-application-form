@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
 
 app = Flask(__name__)
 
@@ -20,16 +22,33 @@ class Form(db.Model):
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        data = dict(request.form)
+        """
+        ARDIT SOLUTION:
 
         first_name = request.form["first_name"]
         last_name = request.form["last_name"]
         email = request.form["email"]
-        available_date = request.form["date"]
+        date = request.form["date"]
+        date_obj = datetime.strptime(date, "%Y-%m-%d")
         occupation = request.form["occupation"]
-        print(first_name, last_name, email, available_date, occupation)
-
+        print(first_name, last_name, email, date_obj, occupation)
         print(data)
+
+        form = Form(first_name=first_name, last_name=last_name,
+                    email=email, date=date_obj, occupation=occupation)
+        """
+        # MY SOLUTION:
+        data = dict(request.form)
+        print(data)
+        form = Form(first_name=data["first_name"], last_name=data["last_name"],
+                    email=data["email"],
+                    date=datetime.strptime(data["date"], "%Y-%m-%d"),
+                    occupation=data["occupation"])
+
+        db.session.add(form)
+        db.session.commit()
+
+
 
     return render_template("index.html")
 
